@@ -35,6 +35,15 @@ resource "aws_instance" "app_server" {
   key_name      = "rhpds-key-27-02-23"
   associate_public_ip_address = "true"
   vpc_security_group_ids = [aws_security_group.forwarder.id]
+  
+  user_data = <<-EOL
+  #!/bin/bash -xe
+  sudo yum install yum-utils -y
+  sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+  sudo yum install terraform -y
+  sudo wget https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-install-linux-4.12.5.tar.gz
+  EOL
+  
   tags = {
     Name = "JumphostWithEverything"
   }
